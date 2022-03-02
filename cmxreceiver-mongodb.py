@@ -38,8 +38,7 @@ from pymongo import MongoClient
 
 ############## USER DEFINED SETTINGS ###############
 # MERAKI SETTINGS
-validator = "EnterYourValidator"
-secret = "EnterYourSecret"
+
 version = "2.0" # This code was written to support the CMX JSON version specified
 
 # Save CMX Data
@@ -93,20 +92,21 @@ def get_cmxJSON():
     if not request.json or not 'data' in request.json:
         return("invalid data",400)
     cmxdata = request.json
+    print(cmxdata)
     #pprint(cmxdata, indent=1)
     print("Received POST from ",request.environ['REMOTE_ADDR'])
 
     # Verify secret
     if cmxdata['secret'] != secret:
         print("secret invalid:", cmxdata['secret'])
-        return("invalid secret",403)
+        # return("invalid secret",403)
     else:
         print("secret verified: ", cmxdata['secret'])
 
     # Verify version
     if cmxdata['version'] != version:
         print("invalid version")
-        return("invalid version",400)
+        # return("invalid version",400)
     else:
         print("version verified: ", cmxdata['version'])
 
@@ -117,7 +117,7 @@ def get_cmxJSON():
         print("Bluetooth Devices Seen")
     else:
         print("Unknown Device 'type'")
-        return("invalid device type",403)
+        # return("invalid device type",403)
 
     # Do something with data (commit to database)
     save_data(cmxdata)
