@@ -30,17 +30,23 @@ Developers.Meraki.com
 
 # Libraries
 from pprint import pprint
-from flask import Flask
+from flask import Flask,jsonify,render_template
 from flask import json
 from flask import request
 import sys, getopt
 from pymongo import MongoClient
+import pandas as pd
 
 ############## USER DEFINED SETTINGS ###############
 # MERAKI SETTINGS
-
+validator = "d3297bdf535d83a11e19bc458579768528a93164"
+secret = "Ivis@ivis5"
 version = "2.0" # This code was written to support the CMX JSON version specified
 
+
+client = MongoClient("mongodb://localhost:27017")
+
+    
 # Save CMX Data
 def save_data(data):
     print("---- SAVING CMX DATA ----")
@@ -71,7 +77,7 @@ def save_data(data):
 
 
     # Commit to database
-    client = MongoClient("mongodb://localhost:27017")
+    
     db = client.test
     result = db.cmxdata.insert_one(data)
     print("MongoDB insert result: ",result )
@@ -126,7 +132,14 @@ def get_cmxJSON():
     return "CMX POST Received"
 
 
-
+@app.route("/data")
+def home():
+    db = client["test"]
+    data = db["cmxdata"]
+    data_list =[j for i in data.find({}) for j in i['data']['observations'] if j is not None]
+    df = pd.DataFrame(data_list)
+    return render_template('index.html',res = df.to_html(classes = 'display',table_id = 'tbAdresse',
+        header = True)) #df.to_html()
 
 # Launch application with supplied arguments
 

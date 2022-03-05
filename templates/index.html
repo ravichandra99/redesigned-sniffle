@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+
+  <meta charset="UTF-8">
+
+
+  <title>Datatable columns filter</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link rel='stylesheet' href='https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css'>
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'>
+  
+
+  <script>
+  window.console = window.console || function(t) {};
+</script>
+
+  
+  
+  <script>
+  if (document.location.search.match(/type=embed/gi)) {
+    window.parent.postMessage("resize", "*");
+  }
+</script>
+
+
+</head>
+
+<body translate="no" >
+        {{res|safe}}
+        <script src="https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-1b93190375e9ccc259df3a57c1abc0e64599724ae30d7ea4c6877eb615f89387.js"></script>
+
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script>
+      <script src='https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js'></script>
+      <script src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js'></script>
+            <script id="rendered-js" >
+      $(document).ready(function () {
+        // Setup - add a text input to each header cell
+        $('#tbAdresse thead th').each(function () {
+          var title = $(this).text();
+          $(this).html('<input type="text"   placeholder="Search ' + title + '" />');
+        });
+      
+        // DataTable
+        var table = $('#tbAdresse').DataTable();
+      
+        // Apply the search
+        table.columns().every(function () {
+          var that = this;
+      
+          $('input', this.header()).on('keypress change', function (e) {
+            var keycode = e.which;
+            //launch search action only when enter is pressed
+            if (keycode == '13') {
+              console.log('enter key pressed !');
+              if (that.search() !== this.value) {
+                that.
+                search(this.value).
+                draw();
+              }
+            }
+      
+          });
+        });
+      });
+      //# sourceURL=pen.js
+          </script>
+      
+        
+      
+      </body>
+      
+      </html>
